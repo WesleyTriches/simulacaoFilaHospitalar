@@ -1,6 +1,7 @@
 #include <iostream>
 #include <queue>
 
+
 using namespace std;
 
 struct cliente{
@@ -9,10 +10,17 @@ struct cliente{
     int horas, minutos;
 };
 
+int calculoEspera(int chegadaHora, int chegadaMinutos, int horaAtendimento, int minutoAtendimento){
+    int converterMinutos = ((horaAtendimento*60 + minutoAtendimento) - (chegadaHora*60 + chegadaMinutos));
+    return converterMinutos;
+}
+
 int main(){
     queue<cliente>vermelha, amarela, verde, branca;
     cliente aux;
     char opcao;
+    int hh = 0, mm = 0, lotacao = 0, esperaMaxima = 0;
+    int totalAtendidos = 0, atendidosV = 0, atendidosA = 0, atendidosD = 0, atendidosB = 0;
     do{
 
         cout << "Fazer um menu" << endl; // fazer o menu com as opcoes 
@@ -41,7 +49,29 @@ int main(){
 
             case 'A':
                 {
+                    cin >> hh >> mm;
+                    if (!vermelha.empty()){
+                        aux = vermelha.front(); vermelha.pop(); atendidosV++; totalAtendidos ++;
+                    }
+                    else if(!amarela.empty()){
+                        aux = amarela.front(); amarela.pop(); atendidosA++; totalAtendidos ++;
 
+                    }
+                    else if(!verde.empty()){
+                        aux = verde.front(); verde.pop(); atendidosD++; totalAtendidos ++;
+
+                    }
+                    else if(!branca.empty()){
+                        aux = branca.front(); branca.pop(); atendidosB++; totalAtendidos ++;
+                    }
+                    else{
+                        cout << hh << ":" << mm << " Sem pacientes aguardando atendimento" << endl;
+                        break;
+                    }
+
+                    int espera = calculoEspera(aux.horas, aux.minutos, hh, mm);
+                    if(esperaMaxima < espera) esperaMaxima = espera;
+                    cout << "Tempo de espera" << espera << " minutos" << endl;
                 }
                 break;
 
