@@ -92,10 +92,10 @@ void atender(filas &fila, int &hh, int &mm, int &esperaMaxima, int &totalAtendid
                 totalAtendidos++;
         }
 
-            int espera = calculoEspera(pacientes.horas, pacientes.minutos, hh, mm);
-            if (esperaMaxima < espera)
-                esperaMaxima = espera;
-            cout << "Tempo de espera: " << espera << " minutos" << endl;
+        int espera = calculoEspera(pacientes.horas, pacientes.minutos, hh, mm);
+        if (esperaMaxima < espera)
+            esperaMaxima = espera;
+        cout << "Tempo de espera: " << espera << " minutos" << endl;
 }
 
 void relatorio(){
