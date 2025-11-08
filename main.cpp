@@ -28,7 +28,7 @@ int calculoEspera(int chegadaHora, int chegadaMinutos, int horaAtendimento, int 
     return converterMinutos;
 }
 
-void cadastro(filas &fila, int &picoLotacao, int &esperaVermelha, int &esperaAmarela, int &esperaVerde, int &esperaBranca){
+void cadastro(filas &fila, int &picoLotacao){
     paciente aux;
     cin.ignore();
     cout << "Gerando senha do paciente: " << endl;
@@ -41,34 +41,30 @@ void cadastro(filas &fila, int &picoLotacao, int &esperaVermelha, int &esperaAma
         case 'V':
         {
             fila.vermelha.push(aux);
-            esperaVermelha++;
         }break; 
 
         case 'A':
         {
             fila.amarela.push(aux);
-            esperaAmarela++;
         }break;
 
         case 'D':
         {
             fila.verde.push(aux);
-            esperaVerde++;
         }break;
 
         case 'B':
         {
             fila.branca.push(aux);
-            esperaBranca++;
         }break;
     }
     int pacientesFilas = fila.vermelha.size() + fila.amarela.size() + fila.verde.size() + fila.branca.size();
-    if(picoLotacao < pacientesFilas)
+        if(picoLotacao < pacientesFilas)
         picoLotacao = pacientesFilas;
 }
 
 void atender(filas &fila, int &hh, int &mm, int &esperaMaxima, int &totalAtendidos, 
-    int &atendidosV, int &atendidosA, int &atendidosD, int &atendidosB, int &esperaVermelha, int &esperaAmarela, int &esperaVerde, int &esperaBranca){
+    int &atendidosV, int &atendidosA, int &atendidosD, int &atendidosB){
         paciente pacientes;
         if(fila.vermelha.empty() && fila.amarela.empty() && fila.verde.empty() && fila.branca.empty()){
             cout << hh << " " << mm << endl <<  "Sem pacientes aguardando atendimento" << endl;
@@ -79,28 +75,24 @@ void atender(filas &fila, int &hh, int &mm, int &esperaMaxima, int &totalAtendid
                 fila.vermelha.pop();
                 atendidosV++;
                 totalAtendidos++;
-                esperaVermelha--;
 
         }else if(!fila.amarela.empty()){
                 pacientes = fila.amarela.front();
                 fila.amarela.pop();
                 atendidosA++;
                 totalAtendidos++;
-                esperaAmarela--;
 
         }else if(!fila.verde.empty()){
                 pacientes = fila.verde.front();
                 fila.verde.pop();
                 atendidosD++;
                 totalAtendidos++;
-                esperaVerde--;
 
         }else if(!fila.branca.empty()){
                 pacientes = fila.branca.front();
                 fila.branca.pop();
                 atendidosB++;
                 totalAtendidos++;
-                esperaBranca--; 
         }
 
         int espera = calculoEspera(pacientes.horas, pacientes.minutos, hh, mm);
@@ -109,13 +101,13 @@ void atender(filas &fila, int &hh, int &mm, int &esperaMaxima, int &totalAtendid
         cout << "Tempo de espera: " << espera << " minutos" << endl;
 }
 
-void relatorio(int totalAtendidos, int esperaVermelha, int esperaAmarela, int esperaVerde, int esperaBranca){
+void relatorio(int totalAtendidos, filas &fila){
     cout << "Relatorio de atendimentos" << endl
      << "Total de pacientes atendidos: " << totalAtendidos << endl
-     << "Espera Emergencia V: " << esperaVermelha << endl
-     << "Espera Urgencia A: " << esperaAmarela << endl
-     << "Espera Pouco Urgente D: " << esperaVerde << endl
-     << "Espera Nao Urgente B: " << esperaBranca << endl;
+     << "Espera Emergencia V: " << fila.vermelha.size() << endl
+     << "Espera Urgencia A: " << fila.amarela.size() << endl
+     << "Espera Pouco Urgente D: " << fila.verde.size() << endl
+     << "Espera Nao Urgente B: " << fila.branca.size() << endl;
 }
 
 void saida(int totalAtendidos, int atendidosV, int atendidosA, int atendidosD, int atendidosB, int esperaMaxima){
@@ -134,7 +126,6 @@ int main()
     char opcao;
     int hh = 0, mm = 0, esperaMaxima = 0, picoLotacao = 0;
     int totalAtendidos = 0, atendidosV = 0, atendidosA = 0, atendidosD = 0, atendidosB = 0;
-    int esperaVermelha = 0, esperaAmarela = 0, esperaVerde = 0, esperaBranca = 0;
     
     do
     {
@@ -145,7 +136,7 @@ int main()
         {
             case 'C':
             {
-                cadastro(fila, picoLotacao, esperaVermelha, esperaAmarela, esperaVerde, esperaBranca);
+                cadastro(fila, picoLotacao);
             }
             break;
 
@@ -153,14 +144,14 @@ int main()
             {
                 cout << "Digite a hora do atendimento(HH MM): " << endl;
                 cin >> hh >> mm;
-                atender(fila, hh, mm, esperaMaxima, totalAtendidos, atendidosV, atendidosA, atendidosD, atendidosB, esperaVermelha, esperaAmarela, esperaVerde, esperaBranca);
+                atender(fila, hh, mm, esperaMaxima, totalAtendidos, atendidosV, atendidosA, atendidosD, atendidosB);
             }
             break;
 
             case 'D':
             {   
                 cout << endl;
-                relatorio(totalAtendidos, esperaVermelha, esperaAmarela, esperaVerde, esperaBranca);
+                relatorio(totalAtendidos, fila);
                 cout << "Pico de lotacao: " << picoLotacao << endl;
             }
             break;
