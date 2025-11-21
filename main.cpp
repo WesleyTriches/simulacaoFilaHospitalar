@@ -110,14 +110,15 @@ void relatorio(int totalAtendidos, filas &fila){
      << "Espera Nao Urgente B: " << fila.branca.size() << endl;
 }
 
-void saida(int totalAtendidos, int atendidosV, int atendidosA, int atendidosD, int atendidosB, int esperaMaxima){
+void saida(int totalAtendidos, int atendidosV, int atendidosA, int atendidosD, int atendidosB, int picoLotacao, int esperaMaxima){
     cout << endl << "Relatorio final de atendimentos" << endl
      << "Total de pacientes atendidos: "<< totalAtendidos << endl
      << "Atendidos na fila vermelha: " << atendidosV << endl
      << "Atendidos na fila amarela: " << atendidosA << endl 
      << "Atendidos na fila verde: " << atendidosD << endl
-     << "Atendidos na fila branca: " << atendidosB << endl  
-     << "Espera maxima registrada: " << esperaMaxima << endl;
+     << "Atendidos na fila branca: " << atendidosB << endl
+     << "Pico de lotacao: " << picoLotacao << endl    
+     << "Espera maxima registrada: " << esperaMaxima << " minutos" << endl;
 }
 
 int main()
@@ -152,14 +153,13 @@ int main()
             {   
                 cout << endl;
                 relatorio(totalAtendidos, fila);
-                cout << "Pico de lotacao: " << picoLotacao << endl;
             }
             break;
 
             case 'Q':
             {
                 cout << endl;
-                saida(totalAtendidos, atendidosV, atendidosA, atendidosD, atendidosB, esperaMaxima);
+                saida(totalAtendidos, atendidosV, atendidosA, atendidosD, atendidosB,  picoLotacao, esperaMaxima);
                 cout << "Saindo do sistema..." << endl;
             }
             break;
